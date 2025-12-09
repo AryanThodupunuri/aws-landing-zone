@@ -26,6 +26,11 @@ variable "vpc_cidr" {
   description = "CIDR block for VPC"
   type        = string
   default     = "10.0.0.0/16"
+
+  validation {
+    condition     = can(cidrhost(var.vpc_cidr, 0))
+    error_message = "VPC CIDR must be a valid IPv4 CIDR block."
+  }
 }
 
 variable "enable_nat_gateway" {
@@ -63,6 +68,11 @@ variable "cloudtrail_log_retention_days" {
   description = "Number of days to retain CloudTrail logs in CloudWatch"
   type        = number
   default     = 90
+
+  validation {
+    condition     = var.cloudtrail_log_retention_days >= 1 && var.cloudtrail_log_retention_days <= 3653
+    error_message = "CloudTrail log retention days must be between 1 and 3653 (10 years)."
+  }
 }
 
 # AWS Config Configuration
@@ -82,6 +92,11 @@ variable "config_delivery_frequency" {
   description = "Delivery frequency for AWS Config snapshots"
   type        = string
   default     = "Six_Hours"
+
+  validation {
+    condition     = contains(["One_Hour", "Three_Hours", "Six_Hours", "Twelve_Hours", "TwentyFour_Hours"], var.config_delivery_frequency)
+    error_message = "Config delivery frequency must be one of: One_Hour, Three_Hours, Six_Hours, Twelve_Hours, TwentyFour_Hours."
+  }
 }
 
 # IAM Configuration
