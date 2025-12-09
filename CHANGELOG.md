@@ -12,8 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VPC module with multi-AZ support
   - Public, private, and database subnets
   - Internet Gateway for public subnets
-  - NAT Gateways for private subnet internet access
+  - NAT Gateways for private subnet internet access (single or multi-NAT modes)
   - VPC Flow Logs integration
+  - Support for 2-6 availability zones
 - IAM module with least-privilege roles
   - CloudTrail service role
   - AWS Config service role
@@ -68,13 +69,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CloudTrail log file validation enabled
 - VPC Flow Logs for network monitoring
 - AWS Config rules for compliance monitoring
+- Input validation for all critical variables
+
+### Fixed
+- CloudTrail circular dependency with CloudWatch log group
+- NAT Gateway subnet reference for single NAT mode
+- NAT Gateway routing reference for single NAT mode
+- IAM role principal validation to prevent unusable roles
 
 ### Documentation
-- Comprehensive README
-- Architecture diagrams and documentation
-- Security policy (SECURITY.md)
+- Comprehensive README with quick start guide
+- Detailed architecture documentation (ARCHITECTURE.md)
+- Security best practices guide (SECURITY.md)
 - Contributing guidelines (CONTRIBUTING.md)
+- Version history (CHANGELOG.md)
 - MIT License (LICENSE)
-- Changelog (CHANGELOG.md)
 
 [1.0.0]: https://github.com/AryanThodupunuri/aws-landing-zone/releases/tag/v1.0.0
