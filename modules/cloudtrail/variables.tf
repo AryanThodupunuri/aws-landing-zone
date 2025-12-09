@@ -14,12 +14,6 @@ variable "enable_cloudwatch_logs" {
   default     = true
 }
 
-variable "cloudwatch_logs_group_arn" {
-  description = "CloudWatch Logs group ARN for CloudTrail"
-  type        = string
-  default     = ""
-}
-
 variable "cloudwatch_logs_role_arn" {
   description = "IAM role ARN for CloudTrail CloudWatch Logs"
   type        = string

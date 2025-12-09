@@ -1,5 +1,19 @@
 # CloudTrail Module - Audit logging for AWS API calls
 
+# CloudWatch Log Group for CloudTrail
+resource "aws_cloudwatch_log_group" "cloudtrail" {
+  count             = var.enable_cloudwatch_logs ? 1 : 0
+  name              = "/aws/cloudtrail/${var.name_prefix}"
+  retention_in_days = var.log_retention_days
+
+  tags = merge(
+    var.tags,
+    {
+      Name = "${var.name_prefix}-cloudtrail-logs"
+    }
+  )
+}
+
 resource "aws_cloudtrail" "main" {
   name                          = "${var.name_prefix}-trail"
   s3_bucket_name                = var.s3_bucket_name
@@ -27,27 +41,13 @@ resource "aws_cloudtrail" "main" {
     insight_type = "ApiCallRateInsight"
   }
 
-  cloud_watch_logs_group_arn = var.cloudwatch_logs_group_arn != "" ? "${var.cloudwatch_logs_group_arn}:*" : null
-  cloud_watch_logs_role_arn  = var.cloudwatch_logs_role_arn
+  cloud_watch_logs_group_arn = var.enable_cloudwatch_logs ? "${aws_cloudwatch_log_group.cloudtrail[0].arn}:*" : null
+  cloud_watch_logs_role_arn  = var.enable_cloudwatch_logs ? var.cloudwatch_logs_role_arn : null
 
   tags = merge(
     var.tags,
     {
       Name = "${var.name_prefix}-trail"
-    }
-  )
-}
-
-# CloudWatch Log Group for CloudTrail
-resource "aws_cloudwatch_log_group" "cloudtrail" {
-  count             = var.enable_cloudwatch_logs ? 1 : 0
-  name              = "/aws/cloudtrail/${var.name_prefix}"
-  retention_in_days = var.log_retention_days
-
-  tags = merge(
-    var.tags,
-    {
-      Name = "${var.name_prefix}-cloudtrail-logs"
     }
   )
 }

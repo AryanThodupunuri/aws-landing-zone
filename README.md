@@ -112,6 +112,8 @@ developer_role_principals = ["arn:aws:iam::123456789012:user/developer"]
 readonly_role_principals  = ["arn:aws:iam::123456789012:user/auditor"]
 ```
 
+**Note**: Developer and read-only roles will only be created if you provide at least one principal ARN. If you don't need these roles immediately, you can omit the `developer_role_principals` and `readonly_role_principals` variables.
+
 ## Modules
 
 ### VPC Module (`modules/vpc`)

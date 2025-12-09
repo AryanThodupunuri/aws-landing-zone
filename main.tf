@@ -81,13 +81,12 @@ module "cloudtrail" {
   source = "./modules/cloudtrail"
   count  = var.enable_cloudtrail ? 1 : 0
 
-  name_prefix               = var.name_prefix
-  s3_bucket_name            = module.s3.cloudtrail_bucket_id
-  enable_cloudwatch_logs    = var.enable_cloudtrail_cloudwatch_logs
-  cloudwatch_logs_group_arn = var.enable_cloudtrail_cloudwatch_logs ? module.cloudtrail[0].cloudwatch_log_group_arn : ""
-  cloudwatch_logs_role_arn  = module.iam.cloudtrail_role_arn
-  log_retention_days        = var.cloudtrail_log_retention_days
-  tags                      = var.default_tags
+  name_prefix              = var.name_prefix
+  s3_bucket_name           = module.s3.cloudtrail_bucket_id
+  enable_cloudwatch_logs   = var.enable_cloudtrail_cloudwatch_logs
+  cloudwatch_logs_role_arn = module.iam.cloudtrail_role_arn
+  log_retention_days       = var.cloudtrail_log_retention_days
+  tags                     = var.default_tags
 
   depends_on = [module.s3]
 }

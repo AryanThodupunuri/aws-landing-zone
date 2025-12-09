@@ -146,7 +146,7 @@ resource "aws_iam_role_policy" "flow_logs_cloudwatch" {
 
 # Developer Role with least privilege
 resource "aws_iam_role" "developer" {
-  count = var.enable_developer_role ? 1 : 0
+  count = var.enable_developer_role && length(var.developer_role_principals) > 0 ? 1 : 0
   name  = "${var.name_prefix}-developer-role"
 
   assume_role_policy = jsonencode({
@@ -166,7 +166,7 @@ resource "aws_iam_role" "developer" {
 }
 
 resource "aws_iam_role_policy" "developer" {
-  count = var.enable_developer_role ? 1 : 0
+  count = var.enable_developer_role && length(var.developer_role_principals) > 0 ? 1 : 0
   name  = "${var.name_prefix}-developer-policy"
   role  = aws_iam_role.developer[0].id
 
@@ -211,7 +211,7 @@ resource "aws_iam_role_policy" "developer" {
 
 # ReadOnly Role for auditing
 resource "aws_iam_role" "readonly" {
-  count = var.enable_readonly_role ? 1 : 0
+  count = var.enable_readonly_role && length(var.readonly_role_principals) > 0 ? 1 : 0
   name  = "${var.name_prefix}-readonly-role"
 
   assume_role_policy = jsonencode({
@@ -231,7 +231,7 @@ resource "aws_iam_role" "readonly" {
 }
 
 resource "aws_iam_role_policy_attachment" "readonly" {
-  count      = var.enable_readonly_role ? 1 : 0
+  count      = var.enable_readonly_role && length(var.readonly_role_principals) > 0 ? 1 : 0
   role       = aws_iam_role.readonly[0].name
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
