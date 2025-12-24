@@ -1,0 +1,42 @@
+# Example terraform.tfvars
+# Copy this file to terraform.tfvars and customize for your environment
+
+# AWS Region
+aws_region = "us-east-1"
+
+# Naming
+name_prefix = "my-org-lz"
+
+# VPC Configuration
+vpc_cidr                   = "10.0.0.0/16"
+number_of_availability_zones = 2
+enable_nat_gateway         = true
+single_nat_gateway         = false  # Set to true for cost savings in dev/test
+enable_vpc_flow_logs       = true
+
+# CloudTrail Configuration
+enable_cloudtrail                  = true
+enable_cloudtrail_cloudwatch_logs  = true
+cloudtrail_log_retention_days      = 90
+
+# AWS Config Configuration
+enable_config              = true
+enable_config_rules        = true
+config_delivery_frequency  = "Six_Hours"
+
+# IAM Roles Configuration
+enable_developer_role = true
+enable_readonly_role  = true
+
+# Optional: Specify principals that can assume roles
+# developer_role_principals = ["arn:aws:iam::123456789012:user/developer"]
+# readonly_role_principals  = ["arn:aws:iam::123456789012:user/auditor"]
+
+# Tags
+default_tags = {
+  ManagedBy   = "Terraform"
+  Environment = "Production"
+  Project     = "AWS-Landing-Zone"
+  Owner       = "Platform-Team"
+  CostCenter  = "Infrastructure"
+}
