@@ -22,6 +22,9 @@ terraform plan -out=plan.tfplan -var-file=../../terraform.tfvars.example
 terraform show -json plan.tfplan > ../../demo/example-plan.json
 ```
 
+Testing
+- Install Go, run `go test ./tests/terratest -v` for plan-only integration tests.
+
 What this repo demonstrates
 - Modular Terraform architecture suitable for multi-account landing zones
 - Secure defaults (CloudTrail, centralized logging design)
