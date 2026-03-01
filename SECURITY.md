@@ -102,3 +102,14 @@ Security updates will be released as patch versions (x.x.X) and announced via:
 - Security Advisories
 
 Subscribe to repository notifications to stay informed.
+
+## Demo artifacts policy
+- No credentials or access keys are committed.
+- All plan JSONs and output snapshots in `demo/` are sanitized: account IDs, ARNs, email addresses, hostnames replaced with placeholders.
+- To generate local artifacts, use `demo/plan.sh` which runs terraform plan with `-backend=false` and then outputs JSON. Sanitize using `demo/sanitize_plan.py` before committing.
+
+Minimum IAM permissions for local plan (if running against real account)
+- `iam:List*`
+- `ec2:Describe*`
+- `s3:List*`
+(This is plan-only; applying requires a broader set of permissions — see module docs.)

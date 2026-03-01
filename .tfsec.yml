@@ -1,0 +1,2 @@
+exclude:
+  - AWS004  # example: exclude a check you intentionally accept; keep minimal

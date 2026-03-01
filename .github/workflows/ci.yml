@@ -1,0 +1,63 @@
+name: ci
+
+on:
+  pull_request:
+    paths:
+      - '**/*.tf'
+      - '.github/**'
+      - 'modules/**'
+      - 'examples/**'
+      - 'demo/**'
+
+jobs:
+  terraform-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: '1.5.0' # adjust as appropriate
+
+      - name: Install tfsec
+        run: |
+          wget https://github.com/aquasecurity/tfsec/releases/latest/download/tfsec-linux-amd64 -O /usr/local/bin/tfsec
+          chmod +x /usr/local/bin/tfsec
+
+      - name: Install tflint
+        run: |
+          curl -sL https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_amd64.zip -o tflint.zip
+          unzip tflint.zip -d /usr/local/bin
+          rm tflint.zip
+
+      - name: Terraform fmt
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init (examples/minimal)
+        working-directory: examples/minimal
+        run: terraform init -backend=false
+
+      - name: Terraform validate
+        working-directory: examples/minimal
+        run: terraform validate
+
+      - name: Terraform plan (examples/minimal)
+        working-directory: examples/minimal
+        run: |
+          terraform plan -out=plan.tfplan -var-file=../../terraform.tfvars.example || true
+          terraform show -json plan.tfplan > ../../demo/ci-plan.json || true
+
+      - name: Run tfsec
+        run: tfsec . || true
+
+      - name: Run tflint (examples/minimal)
+        working-directory: examples/minimal
+        run: tflint || true
+
+      - name: Upload plan artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan
+          path: demo/ci-plan.json
